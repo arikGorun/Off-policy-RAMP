@@ -1,14 +1,15 @@
 import gymnasium as gym
 import numpy as np
 
+
 class NumericPDDLWrapper(gym.Wrapper):
     def flatten_obs(self, obs):
         if isinstance(obs, dict):
-            parts = []
-            for v in obs.values():
-                arr = np.asarray(v, dtype=np.float32).ravel()
-                parts.append(arr)
-            return np.concatenate(parts)
+            wrapped = {}
+            for key, value in obs.items():
+                wrapped[key] = np.asarray(value, dtype=np.float32).ravel()
+            return wrapped
+
         return np.asarray(obs, dtype=np.float32).ravel()
 
     def reset(self, **kwargs):
