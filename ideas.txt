@@ -1,0 +1,29 @@
+OFFLINE LEARNING:
+
+NSAM +p is the model based method which uses a combination of the NSAM (improve?) algorithm to learn the NUMERIC PLANNING domain
+and MetricFF Hoffman (improve?) to plan wih the learned model.
+
+Improve results over BC for simple planning problems?
+
+
+ONLINE LEARNING:
+
+RAMP uses RL to simultaniously train a RL policy and learn a numeric planning domain model.
+The learned domain model is used to find plans by calling a DOMAIN-INDEPENDANT NUMERIC PLANNER (improve?).
+
+If a plan can't be found, acts according to RL policy (improve this heuristic?)
+
+improve RL training efficiency using HER and PER?
+
+improve the shortcut finding heuristic?
+
+find a better suited algorithm than the modified PPO for this setting?
+
+can we do better without a planner? since the result without the planner are very close to the ones with it, 
+feels like changing the RL algorithm enough in this case would make the planner redundant even.
+
+
+improvements to the general NSAM?
+
+
+try replacing the planner with an LLM?
