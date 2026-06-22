@@ -8,6 +8,19 @@ This repository now contains a runnable RAMP-style training loop with:
 - planner-first control with planner-to-RL fallback
 - paper metrics: moving success rate (MA-25), cumulative solution length, and episode-to-90% efficiency
 
+## Source libraries
+
+This workspace builds on the following main libraries and upstream components:
+
+- `stable-baselines3` for deep RL training, including DQN, PPO, and HER replay support
+- `sb3-contrib` for the Rainbow-style QR-DQN implementation used here
+- `gymnasium` for environment interfaces and wrappers
+- local `NumericPDDLGym` sources under `NumericPDDLGym/` for PDDL-based Minecraft-style tasks
+- local `numeric-sam` sources under `numeric-sam/` for numeric action-model-learning and planning-related tooling
+- `pddl-plus-parser` for parsing and exporting PDDL domain/problem files
+- local `Metric-FF` sources under `external/Metric-FF/Metric-FF-v2.1` for classical planning
+- local `VAL` binary support under `external/VAL-build/` for plan validation workflows
+
 ## Run
 
 ```powershell
