@@ -11,7 +11,9 @@ class PlannerInterface:
         self.min_action_observations = int(min_action_observations)
         self.max_plan_len = int(max_plan_len)
         self.metric_ff = MetricFFPlanner(metric_ff_root=metric_ff_root)
-        self.allow_heuristic_fallback = bool(allow_heuristic_fallback)
+        # Implementation-level planner fallback is intentionally disabled:
+        # planner failure should hand control back to RL, not a heuristic planner proxy.
+        self.allow_heuristic_fallback = False
         self.last_backend = "none"
         self.last_error = None
 
@@ -24,23 +26,6 @@ class PlannerInterface:
     @staticmethod
     def _normalize_plan(plan: Iterable[str]) -> list[str]:
         return [str(action).strip() for action in plan if str(action).strip()]
-
-    @staticmethod
-    def _heuristic_fallback(learned_model):
-        if not learned_model:
-            return None
-        candidate_actions = []
-        for action, action_data in learned_model.items():
-            count = float(action_data.get("count", 0))
-            effect = action_data.get("mean_effect")
-            score = count * float((effect ** 2).sum()) if effect is not None else count
-            if count >= 1:
-                candidate_actions.append((int(action), score))
-        if not candidate_actions:
-            return None
-        candidate_actions.sort(key=lambda item: item[1], reverse=True)
-        best_action = candidate_actions[0][0]
-        return [best_action for _ in range(6)]
 
     def get_diagnostics(self) -> dict[str, str | bool | None]:
         binary_path: Path | None = None
@@ -73,16 +58,7 @@ class PlannerInterface:
         except (AttributeError, FileNotFoundError, RuntimeError, ValueError) as exc:
             self.last_error = exc
 
-        if not self.allow_heuristic_fallback:
-            self.last_backend = "none"
-            return None
+        self.last_backend = "none"
+        return None
 
-        fallback_plan = self._heuristic_fallback(learned_model)
-        if fallback_plan is None:
-            self.last_backend = "none"
-            if self.last_error is None:
-                self.last_error = RuntimeError("Heuristic fallback could not derive a plan from the learned model.")
-            return None
-        self.last_backend = "heuristic"
-        return fallback_plan[: self.max_plan_len]
 

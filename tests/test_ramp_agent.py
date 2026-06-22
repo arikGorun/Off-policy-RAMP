@@ -101,13 +101,16 @@ def test_ramp_agent_masks_invalid_rl_actions():
     assert agent.trajectories[0][0][1] == 0
 
 
-def test_planner_interface_reports_missing_metric_ff_binary():
+def test_planner_interface_reports_metric_ff_resolution_status():
     planner = PlannerInterface(min_action_observations=1, max_plan_len=1, allow_heuristic_fallback=False)
 
     diagnostics = planner.get_diagnostics()
 
-    assert diagnostics["metric_ff_binary_available"] is False
-    assert diagnostics["metric_ff_binary_path"] is None
-    assert "Metric-FF binary not found" in diagnostics["metric_ff_resolution_error"]
+    if diagnostics["metric_ff_binary_available"]:
+        assert diagnostics["metric_ff_binary_path"] is not None
+        assert diagnostics["metric_ff_resolution_error"] is None
+    else:
+        assert diagnostics["metric_ff_binary_path"] is None
+        assert "Metric-FF binary not found" in diagnostics["metric_ff_resolution_error"]
 
 

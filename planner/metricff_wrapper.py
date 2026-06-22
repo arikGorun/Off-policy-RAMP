@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import logging
 import os
+import re
 import subprocess
 import tempfile
 from pathlib import Path
@@ -89,6 +90,10 @@ class MetricFFPlanner:
         return domain_path, problem_path
 
     def _run_metric_ff(self, binary_path: Path, domain_path: Path, problem_path: Path, output_path: Path) -> None:
+        if os.name == "nt" and binary_path.suffix.lower() != ".exe":
+            self._run_metric_ff_via_wsl(binary_path, domain_path, problem_path, output_path)
+            return
+
         run_args = [
             str(binary_path),
             "-o",
@@ -106,6 +111,38 @@ class MetricFFPlanner:
                 stdout=plan_file,
                 stderr=subprocess.PIPE,
                 cwd=str(binary_path.parent),
+                timeout=self.timeout,
+                check=False,
+                shell=False,
+            )
+
+    @staticmethod
+    def _windows_to_wsl_path(path: Path) -> str:
+        text = str(path).replace("\\", "/")
+        match = re.match(r"^([A-Za-z]):/(.+)$", text)
+        if not match:
+            raise ValueError(f"Cannot convert Windows path to WSL path: {path}")
+        return f"/mnt/{match.group(1).lower()}/{match.group(2)}"
+
+    def _run_metric_ff_via_wsl(self, binary_path: Path, domain_path: Path, problem_path: Path, output_path: Path) -> None:
+        run_args = [
+            "wsl.exe",
+            "--",
+            self._windows_to_wsl_path(binary_path),
+            "-o",
+            self._windows_to_wsl_path(domain_path),
+            "-f",
+            self._windows_to_wsl_path(problem_path),
+            "-s",
+            "0",
+            "-t",
+            str(self.tolerance),
+        ]
+        with open(output_path, "wt", encoding="utf-8") as plan_file:
+            subprocess.run(
+                run_args,
+                stdout=plan_file,
+                stderr=subprocess.PIPE,
                 timeout=self.timeout,
                 check=False,
                 shell=False,
