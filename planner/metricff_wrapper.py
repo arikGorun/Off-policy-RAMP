@@ -7,8 +7,9 @@ import re
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Optional
 
+import numpy as np
 from pddl_plus_parser.exporters import DomainExporter, MetricFFParser, ProblemExporter
 
 
@@ -102,19 +103,29 @@ class MetricFFPlanner:
             str(problem_path),
             "-s",
             "0",
-            "-t",
-            str(self.tolerance),
         ]
-        with open(output_path, "wt", encoding="utf-8") as plan_file:
-            subprocess.run(
-                run_args,
-                stdout=plan_file,
-                stderr=subprocess.PIPE,
-                cwd=str(binary_path.parent),
-                timeout=self.timeout,
-                check=False,
-                shell=False,
+        completed = subprocess.run(
+            run_args,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            cwd=str(binary_path.parent),
+            timeout=self.timeout,
+            check=False,
+            shell=False,
+            text=True,
+        )
+
+        stdout_text = completed.stdout or ""
+        stderr_text = completed.stderr or ""
+
+        if completed.returncode != 0:
+            self.logger.debug(
+                "Metric-FF returned non-zero exit code (%s). stderr=%s",
+                completed.returncode,
+                stderr_text.strip(),
             )
+
+        output_path.write_text(stdout_text, encoding="utf-8", errors="ignore")
 
     @staticmethod
     def _windows_to_wsl_path(path: Path) -> str:
@@ -135,18 +146,28 @@ class MetricFFPlanner:
             self._windows_to_wsl_path(problem_path),
             "-s",
             "0",
-            "-t",
-            str(self.tolerance),
         ]
-        with open(output_path, "wt", encoding="utf-8") as plan_file:
-            subprocess.run(
-                run_args,
-                stdout=plan_file,
-                stderr=subprocess.PIPE,
-                timeout=self.timeout,
-                check=False,
-                shell=False,
+        completed = subprocess.run(
+            run_args,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=self.timeout,
+            check=False,
+            shell=False,
+            text=True,
+        )
+
+        stdout_text = completed.stdout or ""
+        stderr_text = completed.stderr or ""
+
+        if completed.returncode != 0:
+            self.logger.debug(
+                "Metric-FF (WSL) returned non-zero exit code (%s). stderr=%s",
+                completed.returncode,
+                stderr_text.strip(),
             )
+
+        output_path.write_text(stdout_text, encoding="utf-8", errors="ignore")
 
     def plan(self, env) -> List[str]:
         """Run Metric-FF and return the plan as grounded PDDL action strings.
@@ -170,4 +191,158 @@ class MetricFFPlanner:
             self.parser.parse_plan(raw_output_path, parsed_plan_path)
             if parsed_plan_path.exists():
                 actions = [line.strip() for line in parsed_plan_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+            return actions
+
+    @staticmethod
+    def _apply_aml_to_domain(base_env: Any, learned_model: Dict, min_observations: int):
+        """Return a deep-copied domain whose numeric effect magnitudes are patched
+        with values from the AML learned model.
+
+        Design contract for **discrete** domains
+        ─────────────────────────────────────────
+        Every grounding of the same abstract action produces the *same* deterministic
+        integer numeric effect (e.g. BREAK always adds exactly 1 log regardless of
+        which cell it is applied to).  AML's ``mean_effect`` for a grounding that has
+        been observed enough times is therefore a noisy estimate of that integer —
+        rounding it recovers the true value.
+
+        We therefore:
+        1.  Round each well-observed grounding's fluent delta to the nearest integer.
+        2.  Require ALL well-observed groundings of the same abstract action to agree
+            on that integer.  If they disagree the abstract action is not updated
+            (something is wrong with the learned model).
+        3.  Never average across groundings — there is no meaningful "average effect"
+            in a deterministic discrete domain.
+
+        Only actions whose observation count meets *min_observations* are considered.
+
+        The AML state vector layout is assumed to be:
+            [grounded_predicate_0, ..., grounded_predicate_N-1,
+             grounded_function_0, ..., grounded_function_M-1]
+        which matches *base_env.grounded_predicates* and *base_env.grounded_functions*.
+        """
+        logger = logging.getLogger(__name__)
+
+        domain = copy.deepcopy(base_env.domain)
+        n_preds = len(base_env.grounded_predicates)
+        grounded_funcs = base_env.grounded_functions  # sorted; index = fluent dim offset
+
+        fluent_to_idx: Dict[str, int] = {
+            f.untyped_representation: i for i, f in enumerate(grounded_funcs)
+        }
+
+        # Build per-abstract-action integer fluent deltas.
+        # Each well-observed grounding contributes a rounded integer delta vector.
+        # All groundings must agree; the first one seen anchors the expected value.
+        action_name_to_int_delta: Dict[str, np.ndarray] = {}
+        action_name_conflict: set = set()
+
+        for action_idx, aml_data in learned_model.items():
+            if aml_data.get("count", 0) < min_observations:
+                continue
+            try:
+                action_call = base_env.grounded_actions[int(action_idx)]
+            except (IndexError, TypeError, ValueError):
+                continue
+
+            aname = action_call.name
+            if aname in action_name_conflict:
+                continue  # already flagged; skip further groundings
+
+            # Round to integer — discrete effects are exact integers, mean_effect
+            # is just a noisy estimate from repeated identical observations.
+            raw_fluent = np.asarray(aml_data["mean_effect"], dtype=np.float64)[n_preds:]
+            int_delta = np.round(raw_fluent).astype(int)
+
+            if aname not in action_name_to_int_delta:
+                action_name_to_int_delta[aname] = int_delta
+            elif not np.array_equal(action_name_to_int_delta[aname], int_delta):
+                # Two groundings of the same abstract action disagree → do not patch.
+                logger.warning(
+                    "_apply_aml_to_domain: groundings of '%s' disagree on numeric "
+                    "fluent deltas (%s vs %s); skipping this action.",
+                    aname,
+                    action_name_to_int_delta[aname].tolist(),
+                    int_delta.tolist(),
+                )
+                del action_name_to_int_delta[aname]
+                action_name_conflict.add(aname)
+
+        # Patch numeric effect nodes in the copied domain
+        for aname, action in domain.actions.items():
+            if aname not in action_name_to_int_delta:
+                continue
+            fluent_deltas = action_name_to_int_delta[aname]
+
+            for eff in action.numeric_effects:
+                root = eff.root
+                children = list(root.children)
+                if len(children) < 2:
+                    continue
+                func_node = children[0]
+                mag_node = children[1]
+
+                func_val = func_node.value
+                if not hasattr(func_val, "untyped_representation"):
+                    continue
+                fluent_name = func_val.untyped_representation
+                if fluent_name not in fluent_to_idx:
+                    continue
+
+                fidx = fluent_to_idx[fluent_name]
+                if fidx >= len(fluent_deltas):
+                    continue
+                learned_delta = int(fluent_deltas[fidx])
+
+                if learned_delta == 0:
+                    continue  # no integer effect; leave original
+
+                # Update magnitude and direction in-place on the tree node
+                new_mag = float(abs(learned_delta))
+                mag_node.value = new_mag
+                mag_node.id = str(new_mag)
+
+                if learned_delta > 0:
+                    root.value = "increase"
+                    root.id = "increase"
+                else:
+                    root.value = "decrease"
+                    root.id = "decrease"
+
+        return domain
+
+    def plan_with_model(self, env, learned_model: Dict, min_observations: int = 4) -> List[str]:
+        """Run Metric-FF on a domain patched with AML-learned numeric effects.
+
+        The problem snapshot is still taken from the current env state so that the
+        planner always sees the correct initial conditions and goal.
+        """
+        base_env = self._unwrap_env(env)
+        aml_domain = self._apply_aml_to_domain(base_env, learned_model, min_observations)
+
+        _, problem = self._build_problem_snapshot(env)
+
+        binary_path = self.resolve_binary_path()
+        with tempfile.TemporaryDirectory(prefix="metricff_aml_") as tmp_dir:
+            tmp_path = Path(tmp_dir)
+            domain_path = tmp_path / "metricff_domain.pddl"
+            problem_path = tmp_path / "metricff_problem.pddl"
+            raw_output_path = tmp_path / "metricff_output.txt"
+            parsed_plan_path = tmp_path / "metricff_plan.txt"
+
+            self.domain_exporter.export_domain(aml_domain, domain_path)
+            self.problem_exporter.export_problem(problem, problem_path)
+            self._run_metric_ff(binary_path, domain_path, problem_path, raw_output_path)
+
+            status, actions = self.parser.get_solving_status(raw_output_path)
+            if status != "ok":
+                return []
+
+            self.parser.parse_plan(raw_output_path, parsed_plan_path)
+            if parsed_plan_path.exists():
+                actions = [
+                    line.strip()
+                    for line in parsed_plan_path.read_text(encoding="utf-8").splitlines()
+                    if line.strip()
+                ]
             return actions

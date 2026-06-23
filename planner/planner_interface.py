@@ -48,13 +48,26 @@ class PlannerInterface:
     def try_plan(self, state, goal, learned_model):
         self.last_backend = "none"
         self.last_error = None
+
+        # No learned model yet: defer entirely to RL so the planner never
+        # leaks ground-truth domain knowledge before any learning has occurred.
+        if not learned_model:
+            self.last_error = RuntimeError(
+                "No AML model available yet; deferring to RL."
+            )
+            return None
+
         try:
-            plan = self.metric_ff.plan(state)
+            plan = self.metric_ff.plan_with_model(
+                state, learned_model, self.min_action_observations
+            )
             if plan:
                 self.last_backend = "metric_ff"
                 self.last_error = None
                 return self._normalize_plan(plan)[: self.max_plan_len]
-            self.last_error = RuntimeError("Metric-FF returned no plan for the current state.")
+            self.last_error = RuntimeError(
+                "Metric-FF (AML model) returned no plan for the current state."
+            )
         except (AttributeError, FileNotFoundError, RuntimeError, ValueError) as exc:
             self.last_error = exc
 

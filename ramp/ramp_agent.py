@@ -65,6 +65,12 @@ class RAMPAgent:
             return int(action_arr.reshape(-1)[0])
         return int(action)
 
+    @staticmethod
+    def _canonical_action_text(action_text: str) -> str:
+        text = str(action_text).strip().lower()
+        text = text.replace("(", " ( ").replace(")", " ) ")
+        return " ".join(text.split())
+
     def _extract_model_for_action_scoring(self):
         return getattr(self.rl_agent, "model", self.rl_agent)
 
@@ -125,7 +131,37 @@ class RAMPAgent:
 
         return np.asarray(probs / prob_sum, dtype=np.float32)
 
-    def _resolve_action(self, state: Any, plan: List[int]) -> int:
+    @staticmethod
+    def _unwrap_env_for_attr(env: Any, attr_name: str) -> Any:
+        current = env
+        visited = set()
+        while current is not None and id(current) not in visited:
+            visited.add(id(current))
+            if hasattr(current, attr_name):
+                return current
+            current = getattr(current, "env", None)
+        return None
+
+    def _match_plan_to_action_index(self, env_obj: Any, planned_action: Any) -> Optional[int]:
+        if not (hasattr(env_obj, "action_space") and hasattr(env_obj, "get_action_from_rl")):
+            return None
+
+        action_count = int(getattr(getattr(env_obj, "action_space", None), "n", 0))
+        if action_count <= 0:
+            return None
+
+        target = self._canonical_action_text(str(planned_action))
+        for action_index in range(action_count):
+            try:
+                grounded = env_obj.get_action_from_rl(action_index)
+            except Exception:
+                continue
+            if self._canonical_action_text(str(grounded)) == target:
+                return int(action_index)
+
+        return None
+
+    def _resolve_action(self, state: Any, plan: List[Any]) -> int:
         logger.debug(f"_resolve_action: state={type(state)}, plan_len={len(plan)}, plan={plan[:3] if len(plan) > 3 else plan}")
 
         if plan:
@@ -138,12 +174,27 @@ class RAMPAgent:
                 return int(planned_action)
 
             logger.debug(f"_resolve_action: planned_action is not int, attempting conversion/mapping")
-            if hasattr(self.env, "get_action_from_planning"):
-                logger.debug(f"_resolve_action: env has get_action_from_planning, calling it")
-                grounded_action = self.env.get_action_from_planning(str(planned_action))
+
+            rl_mapping_env = self._unwrap_env_for_attr(self.env, "get_action_from_rl")
+            if rl_mapping_env is not None:
+                resolved_idx = self._match_plan_to_action_index(rl_mapping_env, planned_action)
+                if resolved_idx is not None:
+                    logger.debug(f"_resolve_action: matched planner action string to RL action index {resolved_idx}")
+                    return resolved_idx
+
+            planning_env = self._unwrap_env_for_attr(self.env, "get_action_from_planning")
+            if planning_env is not None:
+                logger.debug(f"_resolve_action: found env with get_action_from_planning ({type(planning_env)})")
+                grounded_action = planning_env.get_action_from_planning(str(planned_action))
                 logger.debug(f"_resolve_action: grounded_action={grounded_action}")
+
+                if isinstance(grounded_action, (int, np.integer)):
+                    resolved = int(grounded_action)
+                    logger.debug(f"_resolve_action: planner returned integer action id {resolved}")
+                    return resolved
+
                 grounded_key = str(grounded_action)
-                grounded_map = getattr(self.env, "grounded_actions_map", {})
+                grounded_map = getattr(planning_env, "grounded_actions_map", {})
                 logger.debug(f"_resolve_action: grounded_map size={len(grounded_map)}")
 
                 if grounded_key in grounded_map:
@@ -151,9 +202,9 @@ class RAMPAgent:
                     logger.debug(f"_resolve_action: found in grounded_map, resolved to {resolved}")
                     return resolved
 
-                if hasattr(self.env, "grounded_actions"):
+                if hasattr(planning_env, "grounded_actions"):
                     logger.debug(f"_resolve_action: trying grounded_actions index lookup")
-                    resolved = int(self.env.grounded_actions.index(grounded_action))
+                    resolved = int(planning_env.grounded_actions.index(grounded_action))
                     logger.debug(f"_resolve_action: found in grounded_actions at index {resolved}")
                     return resolved
 

@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from aml.action_model_learner import NumericActionModelLearner
-from envs.pddl_minecraft_gym import build_wooden_sword_env
+from envs.pddl_minecraft_gym import build_domain_env
 from planner.planner_interface import PlannerInterface
 from ramp.ramp_agent import RAMPAgent
 from rl.her_agent import build_her
@@ -133,6 +133,7 @@ def plot_metrics(metrics, output_dir: Path) -> list[Path]:
 def parse_args():
     parser = argparse.ArgumentParser(description="Train RAMP with planner-to-RL fallback and no missing-implementation fallbacks on NumericPDDLGym wooden-sword tasks.")
     parser.add_argument("--algorithm", choices=["rainbow", "her", "ppo"], default="rainbow")
+    parser.add_argument("--domain", choices=["wooden_sword", "pogo_stick"], default="wooden_sword")
     parser.add_argument("--difficulty", choices=["easy", "medium", "hard"], default="easy")
     parser.add_argument("--episodes", type=int, default=200)
     parser.add_argument("--rl-train-steps", type=int, default=250)
@@ -156,12 +157,15 @@ def main():
     random.seed(args.seed)
     np.random.seed(args.seed)
 
-    logger.info(f"Algorithm={args.algorithm}, Difficulty={args.difficulty}, Episodes={args.episodes}, Seed={args.seed}")
+    logger.info(
+        f"Algorithm={args.algorithm}, Domain={args.domain}, Difficulty={args.difficulty}, Episodes={args.episodes}, Seed={args.seed}"
+    )
 
     map_size = {"easy": 6, "medium": 10, "hard": 15}[args.difficulty]
     logger.info("Building environment...")
-    env = build_wooden_sword_env(
+    env = build_domain_env(
         workspace_root=args.workspace_root,
+        domain=args.domain,
         difficulty=args.difficulty,
         max_steps=250,
         map_size=map_size,
@@ -198,6 +202,7 @@ def main():
     csv_path = write_metrics_csv(metrics, output_dir)
     plot_paths = plot_metrics(metrics, output_dir)
     print(f"algorithm={args.algorithm}")
+    print(f"domain={args.domain}")
     print(f"difficulty={args.difficulty}")
     print(f"episodes={args.episodes}")
     print(f"final_success_ma25={metrics.success_rate_ma25[-1] if metrics.success_rate_ma25 else 0.0:.4f}")

@@ -2,7 +2,7 @@ from stable_baselines3 import DQN
 from stable_baselines3.her.her_replay_buffer import HerReplayBuffer
 
 
-def build_her(env, learning_rate=1e-3, gamma=0.999, verbose=1):
+def build_her(env, learning_rate=1e-3, gamma=0.999, learning_starts=500, verbose=1):
 
     is_goal_env = hasattr(env.observation_space, "spaces") and {
         "observation",
@@ -22,6 +22,7 @@ def build_her(env, learning_rate=1e-3, gamma=0.999, verbose=1):
         replay_buffer_kwargs={"n_sampled_goal": 4, "goal_selection_strategy": "future"},
         learning_rate=learning_rate,
         gamma=gamma,
+        learning_starts=learning_starts,
         verbose=verbose,
     )
     setattr(model, "_ramp_backend", "her_native")
