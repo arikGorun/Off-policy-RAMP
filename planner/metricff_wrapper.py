@@ -104,16 +104,22 @@ class MetricFFPlanner:
             "-s",
             "0",
         ]
-        completed = subprocess.run(
-            run_args,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            cwd=str(binary_path.parent),
-            timeout=self.timeout,
-            check=False,
-            shell=False,
-            text=True,
-        )
+        try:
+            completed = subprocess.run(
+                run_args,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                cwd=str(binary_path.parent),
+                timeout=self.timeout,
+                check=False,
+                shell=False,
+                text=True,
+            )
+        except subprocess.TimeoutExpired as exc:
+            timeout_message = f"Metric-FF timed out after {self.timeout}s."
+            self.logger.warning("%s cmd=%s", timeout_message, run_args)
+            output_path.write_text("", encoding="utf-8", errors="ignore")
+            raise RuntimeError(timeout_message) from exc
 
         stdout_text = completed.stdout or ""
         stderr_text = completed.stderr or ""
@@ -147,15 +153,21 @@ class MetricFFPlanner:
             "-s",
             "0",
         ]
-        completed = subprocess.run(
-            run_args,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            timeout=self.timeout,
-            check=False,
-            shell=False,
-            text=True,
-        )
+        try:
+            completed = subprocess.run(
+                run_args,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=self.timeout,
+                check=False,
+                shell=False,
+                text=True,
+            )
+        except subprocess.TimeoutExpired as exc:
+            timeout_message = f"Metric-FF (WSL) timed out after {self.timeout}s."
+            self.logger.warning("%s cmd=%s", timeout_message, run_args)
+            output_path.write_text("", encoding="utf-8", errors="ignore")
+            raise RuntimeError(timeout_message) from exc
 
         stdout_text = completed.stdout or ""
         stderr_text = completed.stderr or ""

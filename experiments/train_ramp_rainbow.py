@@ -59,6 +59,9 @@ def write_metrics_csv(metrics, output_dir: Path) -> Path:
             "success_ma25",
             "cumulative_solution_length",
             "planner_used",
+            "planner_plan_found",
+            "planner_fallback_to_rl",
+            "planner_solved",
             "planner_backend",
             "planner_error",
             "rl_loss",
@@ -74,6 +77,9 @@ def write_metrics_csv(metrics, output_dir: Path) -> Path:
                 metrics.success_rate_ma25[index],
                 metrics.cumulative_solution_length[index],
                 metrics.episode_planner_used[index],
+                metrics.episode_planner_plan_found[index],
+                metrics.episode_planner_fallback_to_rl[index],
+                metrics.episode_planner_solved[index],
                 metrics.episode_planner_backends[index],
                 metrics.episode_planner_errors[index],
                 metrics.episode_rl_losses[index],
@@ -131,7 +137,9 @@ def plot_metrics(metrics, output_dir: Path) -> list[Path]:
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Train RAMP with planner-to-RL fallback and no missing-implementation fallbacks on NumericPDDLGym wooden-sword tasks.")
+    parser = argparse.ArgumentParser(
+        description="Train RAMP with planner-to-RL fallback and no missing-implementation fallbacks on NumericPDDLGym wooden-sword tasks."
+    )
     parser.add_argument("--algorithm", choices=["rainbow", "her", "ppo"], default="rainbow")
     parser.add_argument("--domain", choices=["wooden_sword", "pogo_stick"], default="wooden_sword")
     parser.add_argument("--difficulty", choices=["easy", "medium", "hard"], default="easy")
@@ -143,6 +151,7 @@ def parse_args():
     parser.add_argument("--log-level", choices=["DEBUG", "INFO", "WARNING", "ERROR"], default="INFO")
     parser.add_argument("--output-dir", type=Path, default=None)
     parser.add_argument("--workspace-root", type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto")
     return parser.parse_args()
 
 
@@ -176,11 +185,11 @@ def main():
 
     logger.info(f"Building {args.algorithm.upper()} agent...")
     if args.algorithm == "rainbow":
-        rl_agent = build_rainbow(env)
+        rl_agent = build_rainbow(env, device=args.device)
     elif args.algorithm == "her":
-        rl_agent = build_her(env)
+        rl_agent = build_her(env, device=args.device)
     else:
-        rl_agent = build_ppo(env)
+        rl_agent = build_ppo(env, device=args.device)
     logger.info("Building AML...")
     aml = NumericActionModelLearner()
     logger.info("Building planner interface...")
@@ -201,6 +210,8 @@ def main():
     output_dir = build_output_dir(args.workspace_root, args.algorithm, args.difficulty, args.output_dir)
     csv_path = write_metrics_csv(metrics, output_dir)
     plot_paths = plot_metrics(metrics, output_dir)
+    print(f"requested_device={args.device}")
+    print(f"actual_device={getattr(rl_agent, 'device', 'unknown')}")
     print(f"algorithm={args.algorithm}")
     print(f"domain={args.domain}")
     print(f"difficulty={args.difficulty}")

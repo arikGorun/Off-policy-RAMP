@@ -27,6 +27,9 @@ class RampMetrics:
     episode_steps: List[int]
     episode_successes: List[int]
     episode_planner_used: List[int]
+    episode_planner_plan_found: List[int]
+    episode_planner_fallback_to_rl: List[int]
+    episode_planner_solved: List[int]
     episode_planner_backends: List[str]
     episode_planner_errors: List[str]
     episode_rl_losses: List[float]
@@ -251,11 +254,11 @@ class RAMPAgent:
         planner_start = time.perf_counter()
         plan = self.planner.try_plan(state=self.env, goal=None, learned_model=getattr(self.aml, "model", {})) or []
         planner_elapsed = time.perf_counter() - planner_start
-        planner_used = bool(plan)
+        planner_plan_found = bool(plan)
         planner_error = self._get_planner_error()
         logger.info(
             f"run_episode: planner.try_plan() completed in {planner_elapsed:.3f}s, "
-            f"planner_used={planner_used}, plan_len={len(plan)}, backend={getattr(self.planner, 'last_backend', 'unknown')}, "
+            f"planner_plan_found={planner_plan_found}, plan_len={len(plan)}, backend={getattr(self.planner, 'last_backend', 'unknown')}, "
             f"error={planner_error or 'none'}"
         )
 
@@ -266,6 +269,9 @@ class RAMPAgent:
         solved = False
         total_reward = 0.0
         steps = 0
+        planner_action_steps = 0
+        rl_action_steps = 0
+        planner_fallback_to_rl = False
 
         logger.info(f"run_episode: entering step loop, max_episode_seconds={max_episode_seconds}")
         while not done:
@@ -276,9 +282,17 @@ class RAMPAgent:
 
             logger.debug(f"run_episode: step {steps}, plan_len={len(plan)}, resolved_action starting")
             action_start = time.perf_counter()
+            used_planner_action = bool(plan)
             action = self._resolve_action(state, plan)
             action_elapsed = time.perf_counter() - action_start
             logger.debug(f"run_episode: step {steps}, action resolved to {action} in {action_elapsed:.3f}s")
+
+            if used_planner_action:
+                planner_action_steps += 1
+            else:
+                rl_action_steps += 1
+                if planner_plan_found:
+                    planner_fallback_to_rl = True
 
             logger.debug(f"run_episode: step {steps}, calling env.step({action})")
             step_start = time.perf_counter()
@@ -295,7 +309,14 @@ class RAMPAgent:
             state = next_state
             logger.debug(f"run_episode: step {steps} complete, total_reward={total_reward:.3f}, solved={solved}, done={done}")
 
-        logger.info(f"run_episode: step loop ended after {steps} steps in {time.perf_counter() - episode_start:.3f}s, solved={solved}")
+        planner_used = bool(planner_plan_found and not planner_fallback_to_rl and planner_action_steps > 0)
+        planner_solved = bool(planner_used and solved)
+        logger.info(
+            f"run_episode: step loop ended after {steps} steps in {time.perf_counter() - episode_start:.3f}s, "
+            f"solved={solved}, planner_used={planner_used}, planner_solved={planner_solved}, "
+            f"planner_action_steps={planner_action_steps}, rl_action_steps={rl_action_steps}, "
+            f"planner_fallback_to_rl={planner_fallback_to_rl}"
+        )
 
         logger.info(f"run_episode: appending trajectory ({len(trajectory)} transitions) to trajectories list")
         self.trajectories.append(trajectory)
@@ -334,6 +355,9 @@ class RAMPAgent:
             "steps": steps,
             "reward": total_reward,
             "planner_used": planner_used,
+            "planner_plan_found": planner_plan_found,
+            "planner_fallback_to_rl": planner_fallback_to_rl,
+            "planner_solved": planner_solved,
             "planner_backend": getattr(self.planner, "last_backend", "unknown"),
             "planner_error": planner_error,
             "rl_loss": latest_rl_loss,
@@ -364,6 +388,9 @@ class RAMPAgent:
         episode_steps: List[int] = []
         episode_successes: List[int] = []
         episode_planner_used: List[int] = []
+        episode_planner_plan_found: List[int] = []
+        episode_planner_fallback_to_rl: List[int] = []
+        episode_planner_solved: List[int] = []
         episode_planner_errors: List[str] = []
         episode_rl_losses: List[float] = []
         episode_rl_batch_seconds: List[float] = []
@@ -396,6 +423,9 @@ class RAMPAgent:
             episode_rewards.append(float(outcome["reward"]))
             episode_steps.append(int(outcome["steps"]))
             episode_planner_used.append(1 if outcome.get("planner_used") else 0)
+            episode_planner_plan_found.append(1 if outcome.get("planner_plan_found") else 0)
+            episode_planner_fallback_to_rl.append(1 if outcome.get("planner_fallback_to_rl") else 0)
+            episode_planner_solved.append(1 if outcome.get("planner_solved") else 0)
             episode_planner_errors.append(str(outcome.get("planner_error") or ""))
             episode_rl_losses.append(float(outcome.get("rl_loss", float("nan"))))
             episode_rl_batch_seconds.append(float(outcome.get("rl_batch_seconds", 0.0)))
@@ -430,6 +460,9 @@ class RAMPAgent:
             episode_steps=episode_steps,
             episode_successes=episode_successes,
             episode_planner_used=episode_planner_used,
+            episode_planner_plan_found=episode_planner_plan_found,
+            episode_planner_fallback_to_rl=episode_planner_fallback_to_rl,
+            episode_planner_solved=episode_planner_solved,
             episode_planner_backends=planner_backends,
             episode_planner_errors=episode_planner_errors,
             episode_rl_losses=episode_rl_losses,

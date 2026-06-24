@@ -29,6 +29,12 @@ class RunRecord:
     final_success_ma25: float
     planner_used_count: int
     planner_used_rate: float
+    planner_plan_found_count: int
+    planner_plan_found_rate: float
+    planner_fallback_count: int
+    planner_fallback_rate: float
+    planner_solved_count: int
+    planner_solved_rate: float
     mean_steps: float
     median_steps: float
     mean_reward: float
@@ -63,6 +69,12 @@ def _load_run(folder: Path) -> Optional[RunRecord]:
     final_success_ma25 = float(df["success_ma25"].iloc[-1]) if "success_ma25" in df.columns else float("nan")
     planner_used_count = int(df["planner_used"].sum()) if "planner_used" in df.columns else 0
     planner_used_rate = float(df["planner_used"].mean()) if "planner_used" in df.columns else float("nan")
+    planner_plan_found_count = int(df["planner_plan_found"].sum()) if "planner_plan_found" in df.columns else planner_used_count
+    planner_plan_found_rate = float(df["planner_plan_found"].mean()) if "planner_plan_found" in df.columns else planner_used_rate
+    planner_fallback_count = int(df["planner_fallback_to_rl"].sum()) if "planner_fallback_to_rl" in df.columns else 0
+    planner_fallback_rate = float(df["planner_fallback_to_rl"].mean()) if "planner_fallback_to_rl" in df.columns else float("nan")
+    planner_solved_count = int(df["planner_solved"].sum()) if "planner_solved" in df.columns else 0
+    planner_solved_rate = float(df["planner_solved"].mean()) if "planner_solved" in df.columns else float("nan")
     mean_steps = float(df["steps"].mean()) if "steps" in df.columns else float("nan")
     median_steps = float(df["steps"].median()) if "steps" in df.columns else float("nan")
     mean_reward = float(df["reward"].mean()) if "reward" in df.columns else float("nan")
@@ -82,6 +94,12 @@ def _load_run(folder: Path) -> Optional[RunRecord]:
         final_success_ma25=final_success_ma25,
         planner_used_count=planner_used_count,
         planner_used_rate=planner_used_rate,
+        planner_plan_found_count=planner_plan_found_count,
+        planner_plan_found_rate=planner_plan_found_rate,
+        planner_fallback_count=planner_fallback_count,
+        planner_fallback_rate=planner_fallback_rate,
+        planner_solved_count=planner_solved_count,
+        planner_solved_rate=planner_solved_rate,
         mean_steps=mean_steps,
         median_steps=median_steps,
         mean_reward=mean_reward,
@@ -182,6 +200,12 @@ def main() -> int:
                 "final_success_ma25": record.final_success_ma25,
                 "planner_used_count": record.planner_used_count,
                 "planner_used_rate": record.planner_used_rate,
+                "planner_plan_found_count": record.planner_plan_found_count,
+                "planner_plan_found_rate": record.planner_plan_found_rate,
+                "planner_fallback_count": record.planner_fallback_count,
+                "planner_fallback_rate": record.planner_fallback_rate,
+                "planner_solved_count": record.planner_solved_count,
+                "planner_solved_rate": record.planner_solved_rate,
                 "mean_steps": record.mean_steps,
                 "median_steps": record.median_steps,
                 "mean_reward": record.mean_reward,
@@ -214,6 +238,12 @@ def main() -> int:
                         "final_success_ma25": float("nan"),
                         "planner_used_count": 0,
                         "planner_used_rate": float("nan"),
+                        "planner_plan_found_count": 0,
+                        "planner_plan_found_rate": float("nan"),
+                        "planner_fallback_count": 0,
+                        "planner_fallback_rate": float("nan"),
+                        "planner_solved_count": 0,
+                        "planner_solved_rate": float("nan"),
                         "mean_steps": float("nan"),
                         "median_steps": float("nan"),
                         "mean_reward": float("nan"),
@@ -234,6 +264,12 @@ def main() -> int:
                         "final_success_ma25": record.final_success_ma25,
                         "planner_used_count": record.planner_used_count,
                         "planner_used_rate": record.planner_used_rate,
+                        "planner_plan_found_count": record.planner_plan_found_count,
+                        "planner_plan_found_rate": record.planner_plan_found_rate,
+                        "planner_fallback_count": record.planner_fallback_count,
+                        "planner_fallback_rate": record.planner_fallback_rate,
+                        "planner_solved_count": record.planner_solved_count,
+                        "planner_solved_rate": record.planner_solved_rate,
                         "mean_steps": record.mean_steps,
                         "median_steps": record.median_steps,
                         "mean_reward": record.mean_reward,
@@ -249,14 +285,14 @@ def main() -> int:
     completed_df = latest_df[latest_df["status"].isin(["complete", "partial"])].copy()
     success_pivot = completed_df.pivot(index="algorithm", columns="difficulty", values="success_rate")
     ma25_pivot = completed_df.pivot(index="algorithm", columns="difficulty", values="final_success_ma25")
-    planner_pivot = completed_df.pivot(index="algorithm", columns="difficulty", values="planner_used_rate")
+    planner_pivot = completed_df.pivot(index="algorithm", columns="difficulty", values="planner_solved_rate")
 
     fig, axes = plt.subplots(1, 3, figsize=(18, 5), constrained_layout=True)
     im0 = _plot_heatmap(axes[0], success_pivot, "Final success rate", fmt=".2f")
     fig.colorbar(im0, ax=axes[0], fraction=0.046, pad=0.04)
     im1 = _plot_heatmap(axes[1], ma25_pivot, "Final success MA-25", fmt=".2f")
     fig.colorbar(im1, ax=axes[1], fraction=0.046, pad=0.04)
-    im2 = _plot_heatmap(axes[2], planner_pivot, "Planner usage rate", fmt=".2f")
+    im2 = _plot_heatmap(axes[2], planner_pivot, "Planner solved episode rate", fmt=".2f")
     fig.colorbar(im2, ax=axes[2], fraction=0.046, pad=0.04)
     heatmap_path = output_dir / "summary_heatmaps.png"
     fig.savefig(heatmap_path, dpi=160)
