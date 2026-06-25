@@ -28,7 +28,7 @@
 | her       | medium     | 3    | her_pogo_stick_medium_seed3_300eps | 300             | complete |
 | her       | medium     | 4    | her_pogo_stick_medium_seed4_300eps | 300             | complete |
 | her       | hard       | 0    | her_pogo_stick_hard_seed0_300eps   | 300             | complete |
-| her       | hard       | 1    | her_pogo_stick_hard_seed1_300eps   | 0               | missing  |
-| her       | hard       | 2    | her_pogo_stick_hard_seed2_300eps   | 0               | missing  |
-| her       | hard       | 3    | her_pogo_stick_hard_seed3_300eps   | 0               | missing  |
-| her       | hard       | 4    | her_pogo_stick_hard_seed4_300eps   | 0               | missing  |
+| her       | hard       | 1    | her_pogo_stick_hard_seed1_300eps   | 300             | complete |
+| her       | hard       | 2    | her_pogo_stick_hard_seed2_300eps   | 300             | complete |
+| her       | hard       | 3    | her_pogo_stick_hard_seed3_300eps   | 300             | complete |
+| her       | hard       | 4    | her_pogo_stick_hard_seed4_300eps   | 300             | complete |

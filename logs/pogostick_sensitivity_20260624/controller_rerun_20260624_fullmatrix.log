@@ -39,3 +39,15 @@
 [2026-06-25 04:38:02] Launching ppo_pogo_stick_hard_seed3_300eps
 [2026-06-25 06:33:12] Finished ppo_pogo_stick_hard_seed3_300eps exit_code=0
 [2026-06-25 06:33:12] Launching ppo_pogo_stick_hard_seed4_300eps
+[2026-06-25 08:26:11] Finished ppo_pogo_stick_hard_seed4_300eps exit_code=0
+[2026-06-25 08:26:11] Launching her_pogo_stick_hard_seed0_300eps
+[2026-06-25 10:09:19] Finished her_pogo_stick_hard_seed0_300eps exit_code=0
+[2026-06-25 10:09:19] Launching her_pogo_stick_hard_seed1_300eps
+[2026-06-25 10:09:29] Finished her_pogo_stick_hard_seed1_300eps exit_code=1
+[2026-06-25 10:09:29] Launching her_pogo_stick_hard_seed2_300eps
+[2026-06-25 11:53:11] Finished her_pogo_stick_hard_seed2_300eps exit_code=0
+[2026-06-25 11:53:11] Launching her_pogo_stick_hard_seed3_300eps
+[2026-06-25 13:41:38] Finished her_pogo_stick_hard_seed3_300eps exit_code=0
+[2026-06-25 13:41:38] Launching her_pogo_stick_hard_seed4_300eps
+[2026-06-25 15:25:13] Finished her_pogo_stick_hard_seed4_300eps exit_code=0
+[2026-06-25 15:25:13] Completion runs done

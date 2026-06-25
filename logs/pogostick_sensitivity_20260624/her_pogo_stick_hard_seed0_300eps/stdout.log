@@ -30,7 +30,7 @@ Wrapping the env in a DummyVecEnv.
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 12       |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 3025     |
 ----------------------------------
@@ -52,8 +52,8 @@ Wrapping the env in a DummyVecEnv.
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 20       |
-|    fps              | 0        |
-|    time_elapsed     | 1        |
+|    fps              | 1        |
+|    time_elapsed     | 0        |
 |    total_timesteps  | 5041     |
 ----------------------------------
 ----------------------------------
@@ -81,7 +81,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.312    |
+|    ep_rew_mean      | 0.281    |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 32       |
@@ -103,18 +103,18 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.325    |
+|    ep_rew_mean      | 0.3      |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 40       |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 10081    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.295    |
+|    ep_rew_mean      | 0.273    |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 44       |
@@ -125,7 +125,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.312    |
+|    ep_rew_mean      | 0.271    |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 48       |
@@ -136,18 +136,18 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.308    |
+|    ep_rew_mean      | 0.25     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 52       |
-|    fps              | 2        |
+|    fps              | 1        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 13105    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.321    |
+|    ep_rew_mean      | 0.25     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 56       |
@@ -158,18 +158,18 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.317    |
+|    ep_rew_mean      | 0.233    |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 60       |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 15121    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.312    |
+|    ep_rew_mean      | 0.234    |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 64       |
@@ -180,7 +180,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.309    |
+|    ep_rew_mean      | 0.235    |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 68       |
@@ -191,7 +191,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.306    |
+|    ep_rew_mean      | 0.236    |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 72       |
@@ -202,7 +202,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.289    |
+|    ep_rew_mean      | 0.224    |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 76       |
@@ -213,7 +213,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.312    |
+|    ep_rew_mean      | 0.237    |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 80       |
@@ -224,7 +224,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.298    |
+|    ep_rew_mean      | 0.226    |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 84       |
@@ -235,7 +235,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.284    |
+|    ep_rew_mean      | 0.227    |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 88       |
@@ -246,7 +246,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.283    |
+|    ep_rew_mean      | 0.25     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 92       |
@@ -257,7 +257,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.292    |
+|    ep_rew_mean      | 0.25     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 96       |
@@ -268,18 +268,18 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.3      |
+|    ep_rew_mean      | 0.26     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 100      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 25201    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.26     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 104      |
@@ -290,7 +290,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.26     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 108      |
@@ -301,51 +301,51 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.3      |
+|    ep_rew_mean      | 0.26     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 112      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 28225    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.28     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 116      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 29233    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.32     |
+|    ep_rew_mean      | 0.29     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 120      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 30241    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.33     |
+|    ep_rew_mean      | 0.31     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 124      |
-|    fps              | 2        |
+|    fps              | 1        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 31249    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.29     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 128      |
@@ -356,7 +356,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.3      |
+|    ep_rew_mean      | 0.29     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 132      |
@@ -367,29 +367,29 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.32     |
+|    ep_rew_mean      | 0.3      |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 136      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 34273    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.3      |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 140      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 35281    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.33     |
+|    ep_rew_mean      | 0.32     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 144      |
@@ -411,18 +411,18 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.32     |
+|    ep_rew_mean      | 0.33     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 152      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 38305    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.33     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 156      |
@@ -433,18 +433,18 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.34     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 160      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 40321    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.32     |
+|    ep_rew_mean      | 0.35     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 164      |
@@ -455,7 +455,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.32     |
+|    ep_rew_mean      | 0.35     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 168      |
@@ -466,18 +466,18 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.34     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 172      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 43345    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.34     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 176      |
@@ -488,7 +488,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.28     |
+|    ep_rew_mean      | 0.32     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 180      |
@@ -499,18 +499,18 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.29     |
+|    ep_rew_mean      | 0.33     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 184      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 46369    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.32     |
+|    ep_rew_mean      | 0.35     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 188      |
@@ -521,29 +521,29 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.33     |
+|    ep_rew_mean      | 0.36     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 192      |
-|    fps              | 2        |
+|    fps              | 1        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 48385    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.33     |
+|    ep_rew_mean      | 0.36     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 196      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 49393    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.33     |
+|    ep_rew_mean      | 0.36     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 200      |
@@ -554,7 +554,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.35     |
+|    ep_rew_mean      | 0.38     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 204      |
@@ -565,18 +565,18 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.34     |
+|    ep_rew_mean      | 0.37     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 208      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 52417    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.34     |
+|    ep_rew_mean      | 0.36     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 212      |
@@ -587,7 +587,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.34     |
+|    ep_rew_mean      | 0.35     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 216      |
@@ -598,7 +598,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.32     |
+|    ep_rew_mean      | 0.33     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 220      |
@@ -613,14 +613,14 @@ Wrapping the env in a DummyVecEnv.
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 224      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 56449    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.32     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 228      |
@@ -642,7 +642,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.29     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 236      |
@@ -653,7 +653,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.29     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 240      |
@@ -664,7 +664,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.28     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 244      |
@@ -675,7 +675,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.3      |
+|    ep_rew_mean      | 0.27     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 248      |
@@ -686,7 +686,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.3      |
+|    ep_rew_mean      | 0.28     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 252      |
@@ -697,18 +697,18 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.3      |
+|    ep_rew_mean      | 0.28     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 256      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 64513    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.28     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 260      |
@@ -719,51 +719,51 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.3      |
+|    ep_rew_mean      | 0.27     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 264      |
-|    fps              | 2        |
+|    fps              | 1        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 66529    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.29     |
+|    ep_rew_mean      | 0.26     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 268      |
-|    fps              | 2        |
+|    fps              | 1        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 67537    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.27     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 272      |
-|    fps              | 2        |
+|    fps              | 1        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 68545    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.32     |
+|    ep_rew_mean      | 0.28     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 276      |
-|    fps              | 2        |
+|    fps              | 1        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 69553    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.32     |
+|    ep_rew_mean      | 0.28     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 280      |
@@ -774,18 +774,18 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.33     |
+|    ep_rew_mean      | 0.28     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 284      |
-|    fps              | 1        |
+|    fps              | 2        |
 |    time_elapsed     | 0        |
 |    total_timesteps  | 71569    |
 ----------------------------------
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.32     |
+|    ep_rew_mean      | 0.26     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 288      |
@@ -796,7 +796,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.31     |
+|    ep_rew_mean      | 0.22     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 292      |
@@ -807,7 +807,7 @@ Wrapping the env in a DummyVecEnv.
 ----------------------------------
 | rollout/            |          |
 |    ep_len_mean      | 252      |
-|    ep_rew_mean      | 0.3      |
+|    ep_rew_mean      | 0.22     |
 |    exploration_rate | 0.05     |
 | time/               |          |
 |    episodes         | 296      |
@@ -821,8 +821,8 @@ algorithm=her
 domain=pogo_stick
 difficulty=hard
 episodes=300
-final_success_ma25=0.2800
-cumulative_solution_length=6443
+final_success_ma25=0.1600
+cumulative_solution_length=4670
 efficiency_episode_90pct=None
 rl_backend=her_native
 planner_backend_counts={'none': 1, 'metric_ff': 299}
