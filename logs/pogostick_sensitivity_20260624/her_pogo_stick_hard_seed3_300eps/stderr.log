@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Arik\Documents\uni\ResearchMethods\experiments\train_ramp_rainbow.py", line 237, in <module>
+    main()
+  File "C:\Users\Arik\Documents\uni\ResearchMethods\experiments\train_ramp_rainbow.py", line 190, in main
+    rl_agent = build_her(env, device=args.device)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Arik\Documents\uni\ResearchMethods\rl\her_agent.py", line 18, in build_her
+    model = DQN(
+            ^^^^
+  File "C:\Users\Arik\anaconda3\envs\RAMP312\Lib\site-packages\stable_baselines3\dqn\dqn.py", line 144, in __init__
+    self._setup_model()
+  File "C:\Users\Arik\anaconda3\envs\RAMP312\Lib\site-packages\stable_baselines3\dqn\dqn.py", line 147, in _setup_model
+    super()._setup_model()
+  File "C:\Users\Arik\anaconda3\envs\RAMP312\Lib\site-packages\stable_baselines3\common\off_policy_algorithm.py", line 196, in _setup_model
+    self.replay_buffer = self.replay_buffer_class(
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Arik\anaconda3\envs\RAMP312\Lib\site-packages\stable_baselines3\her\her_replay_buffer.py", line 64, in __init__
+    super().__init__(
+  File "C:\Users\Arik\anaconda3\envs\RAMP312\Lib\site-packages\stable_baselines3\common\buffers.py", line 572, in __init__
+    key: np.zeros((self.buffer_size, self.n_envs, *_obs_shape), dtype=observation_space[key].dtype)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+numpy.core._exceptions._ArrayMemoryError: Unable to allocate 3.38 GiB for an array with shape (1000000, 1, 906) and data type float32

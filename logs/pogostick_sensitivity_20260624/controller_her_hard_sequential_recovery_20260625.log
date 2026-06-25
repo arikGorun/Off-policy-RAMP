@@ -1,0 +1,4 @@
+﻿[2026-06-25 07:01:28] Starting HER hard sequential recovery (memory threshold 12GB)
+[2026-06-25 07:01:28] Waiting to launch her_pogo_stick_hard_seed1_300eps (active_train_pids=18012, free_mem_gb=13.09)
+[2026-06-25 07:02:28] Waiting to launch her_pogo_stick_hard_seed1_300eps (active_train_pids=18012, free_mem_gb=13.06)
+[2026-06-25 07:03:29] Waiting to launch her_pogo_stick_hard_seed1_300eps (active_train_pids=18012, free_mem_gb=12.92)
